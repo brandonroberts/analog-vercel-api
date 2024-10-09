@@ -11,7 +11,27 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     mainFields: ['module'],
   },
-  plugins: [analog()],
+  plugins: [
+    analog({
+      nitro: {
+        routeRules: {
+          '/**': {
+            headers: { 'X-Robots-Tag': 'all' }
+          },
+          '/**/*.(jpg|jpeg|gif|png)': {
+            headers: { 'Cache-Control': 'public, max-age=31536000, immutable'}
+          },
+          '/index.html': {
+            redirect: {
+              to: '/',
+              statusCode: 301
+            }
+          }
+        },
+        preset: 'vercel'
+      }
+    })
+  ],
   test: {
     globals: true,
     environment: 'jsdom',
